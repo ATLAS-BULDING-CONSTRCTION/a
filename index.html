@@ -1,0 +1,842 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    
+    <meta name="description" content="أطلس للتشييد والبناء | Atlas Construction">
+    <meta name="theme-color" content="#001A33">
+    
+    <link rel="icon" type="image/png" href="https://cdn-icons-png.flaticon.com/512/7528/7528346.png">
+
+    <title>أطلس للتشييد والبناء | Atlas Construction</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800;900&family=Poppins:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        /* --- 1. Variables & Global --- */
+        :root {
+            --primary-navy: #001A33;
+            --accent-cyan: #00A3FF;
+            --mega-bg: #1a1a1a;
+            --mega-heading: #f39c12;
+            --white: #ffffff;
+            --glass-bg: rgba(0, 26, 51, 0.95);
+            --text-color: #2c3e50;
+            --text-light: #5f6c7b;
+            --section-bg: #f4f6f8;
+        }
+
+        html { scroll-behavior: smooth; }
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+        body {
+            font-family: 'Cairo', sans-serif;
+            overflow-x: hidden;
+            background-color: var(--white);
+            color: var(--text-color);
+        }
+
+        html[lang="en"] body { font-family: 'Poppins', sans-serif; }
+
+        a { text-decoration: none; color: inherit; transition: 0.3s; }
+        ul { list-style: none; }
+        img { max-width: 100%; display: block; }
+        
+        section { scroll-margin-top: 100px; }
+
+        /* --- 2. Preloader --- */
+        #preloader {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: var(--white); z-index: 99999;
+            display: flex; justify-content: center; align-items: center;
+            flex-direction: column; transition: opacity 0.5s ease;
+        }
+        .loader-logo { font-size: 40px; color: var(--primary-navy); font-weight: 900; margin-bottom: 20px; animation: pulse 1.5s infinite; }
+        .spinner { width: 40px; height: 40px; border: 4px solid #f3f3f3; border-top: 4px solid var(--accent-cyan); border-radius: 50%; animation: spin 1s linear infinite; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
+
+        /* --- 3. Animation Classes --- */
+        .reveal { opacity: 0; transform: translateY(40px); transition: opacity 0.8s ease-out, transform 0.8s ease-out; will-change: opacity, transform; }
+        .reveal.active { opacity: 1; transform: translateY(0); }
+
+        /* --- 4. Top Bar --- */
+        .top-bar { background-color: #eef1f3; padding: 8px 0; font-size: 13px; border-bottom: 1px solid #ddd; }
+        .container { width: 90%; max-width: 1200px; margin: 0 auto; padding: 0 15px; }
+        .top-bar .container { display: flex; justify-content: space-between; align-items: center; }
+        .top-info span { margin-left: 20px; font-weight: 600; color: var(--text-light); }
+        .top-info i { color: var(--primary-navy); margin-left: 5px; }
+        .lang-btn { background: transparent; border: 1px solid var(--primary-navy); color: var(--primary-navy); padding: 3px 10px; border-radius: 2px; cursor: pointer; font-family: inherit; font-weight: bold; font-size: 12px; }
+        .lang-btn:hover { background: var(--primary-navy); color: var(--white); }
+
+        /* --- 5. Header --- */
+        header { background: var(--white); position: sticky; top: 0; z-index: 9999; box-shadow: 0 4px 20px rgba(0,0,0,0.08); height: 90px; }
+        .header-inner { display: flex; height: 100%; width: 100%; }
+        
+        .logo-area { flex: 0 0 auto; padding-right: 5%; display: flex; align-items: center; background: var(--white); z-index: 5; min-width: 250px; padding-left: 15px; }
+        
+        /* تنسيق اللوجو */
+        .logo img { height: 60px; width: auto; object-fit: contain; }
+
+        /* Nav Wrapper */
+        .nav-wrapper { flex: 1; position: relative; display: flex; align-items: center; justify-content: flex-start; padding-right: 70px; }
+        .nav-wrapper::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: var(--primary-navy); z-index: 0; clip-path: polygon(50px 0, 100% 0, 100% 100%, 0% 100%); }
+        html[dir="ltr"] .nav-wrapper { justify-content: flex-end; padding-left: 70px; padding-right: 20px; }
+        html[dir="ltr"] .nav-wrapper::before { clip-path: polygon(0 0, calc(100% - 50px) 0, 100% 100%, 0 100%); }
+
+        .nav-menu { display: flex; height: 100%; align-items: center; gap: 0; position: relative; z-index: 2; }
+        .nav-item { height: 100%; display: flex; align-items: center; position: relative; }
+        .nav-item.mega-parent { position: static; }
+
+        .nav-link { color: rgba(255,255,255,0.9); font-weight: 700; font-size: 15px; padding: 0 25px; cursor: pointer; transition: 0.3s; height: 100%; display: flex; align-items: center; text-transform: uppercase; letter-spacing: 0.5px; }
+        .nav-link:hover { color: var(--white); background: rgba(255,255,255,0.15); }
+        .nav-link i { font-size: 11px; margin-right: 6px; margin-top: 2px; transition: transform 0.3s; }
+
+        /* Mega Menu */
+        .mega-menu { position: absolute; top: 100%; left: 0; width: 100%; background: var(--mega-bg); padding: 40px 5%; display: grid; grid-template-columns: repeat(4, 1fr); gap: 30px; box-shadow: 0 15px 40px rgba(0,0,0,0.4); opacity: 0; visibility: hidden; transform: translateY(15px); transition: all 0.3s ease; z-index: 10000; border-top: 4px solid var(--accent-cyan); }
+        .nav-item.mega-parent:hover .mega-menu { opacity: 1; visibility: visible; transform: translateY(0); }
+        .mega-col h4 { color: var(--mega-heading); font-size: 16px; font-weight: 800; margin-bottom: 20px; text-transform: uppercase; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px; }
+        .mega-col ul li a { color: #eee; font-size: 14px; font-weight: 500; transition: 0.3s; display: block; margin-bottom: 8px; }
+        .mega-col ul li a:hover { color: var(--accent-cyan); padding-right: 8px; }
+        html[dir="ltr"] .mega-col ul li a:hover { padding-right: 0; padding-left: 8px; }
+
+        /* Dropdown */
+        .dropdown { position: absolute; top: 100%; right: 0; background: var(--white); min-width: 280px; box-shadow: 0 15px 40px rgba(0,0,0,0.2); opacity: 0; visibility: hidden; transform: translateY(15px); transition: all 0.2s ease-in-out; z-index: 10000; border-top: 4px solid var(--accent-cyan); border-radius: 0 0 5px 5px; padding: 10px 0; max-height: 450px; overflow-y: auto; }
+        html[dir="ltr"] .dropdown { right: auto; left: 0; }
+        .nav-item:not(.mega-parent):hover .dropdown { opacity: 1; visibility: visible; transform: translateY(0); }
+        .dropdown li a { display: block; padding: 12px 25px; color: var(--primary-navy); font-size: 15px; font-weight: 700; border-bottom: 1px solid #f4f4f4; transition: 0.2s; text-align: right; background: var(--white); }
+        html[dir="ltr"] .dropdown li a { text-align: left; }
+        .dropdown li a:hover { background: #f0f7ff; color: var(--accent-cyan); padding-right: 30px; border-right: 4px solid var(--accent-cyan); }
+        html[dir="ltr"] .dropdown li a:hover { padding-left: 30px; padding-right: 25px; border-right: none; border-left: 4px solid var(--accent-cyan); }
+        .dropdown-header { padding: 8px 25px; background: #f9f9f9; color: #999; font-size: 12px; font-weight: bold; text-transform: uppercase; pointer-events: none; margin-top: 5px; }
+
+        .hamburger { display: none; font-size: 28px; color: var(--primary-navy); cursor: pointer; margin-left: 20px; z-index: 1001; transition: 0.3s; }
+        .hamburger.active i::before { content: "\f00d"; }
+
+        /* --- 6. Hero --- */
+        .hero { height: 90vh; min-height: 650px; background: url('https://images.unsplash.com/photo-1541888946425-d81bb19240f5?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80') no-repeat center center/cover; position: relative; display: flex; align-items: center; overflow: hidden; }
+        .hero-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(90deg, rgba(0, 26, 51, 0.9) 0%, rgba(0, 26, 51, 0.4) 100%); z-index: 1; }
+        .hero-shape { position: absolute; top: 0; right: 0; width: 45%; height: 100%; background: linear-gradient(135deg, rgba(0, 163, 255, 0.15) 0%, rgba(0, 26, 51, 0.85) 100%); clip-path: polygon(25% 0, 100% 0, 100% 100%, 0% 100%); z-index: 1; pointer-events: none; }
+        html[dir="ltr"] .hero-shape { right: auto; left: 0; clip-path: polygon(0 0, 75% 0, 100% 100%, 0 100%); }
+        .hero-container { position: relative; z-index: 2; width: 90%; max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; }
+        .hero-content { color: var(--white); max-width: 650px; }
+        .hero-title { font-size: 60px; font-weight: 900; line-height: 1.1; margin-bottom: 20px; text-shadow: 0 4px 15px rgba(0,0,0,0.3); }
+        .hero-subtitle { font-size: 26px; font-weight: 600; color: var(--accent-cyan); margin-bottom: 25px; display: block; letter-spacing: 1px; }
+        .hero-desc { font-size: 18px; line-height: 1.7; margin-bottom: 40px; opacity: 0.95; max-width: 550px; }
+        .btn-main { display: inline-block; background-color: var(--accent-cyan); color: var(--white); padding: 16px 45px; font-size: 16px; font-weight: 800; border-radius: 4px; box-shadow: 0 10px 25px rgba(0, 163, 255, 0.4); transition: all 0.3s ease; text-transform: uppercase; border: none; cursor: pointer; }
+        .highlights-box { background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(10px); padding: 40px; border-radius: 0; border-top: 5px solid var(--accent-cyan); border-bottom: 5px solid var(--accent-cyan); color: var(--white); width: 400px; box-shadow: 0 20px 50px rgba(0,0,0,0.4); transform: skewX(-5deg); }
+        .highlights-box > * { transform: skewX(5deg); }
+        .highlights-box h3 { font-size: 26px; margin-bottom: 30px; font-weight: 800; color: var(--white); }
+        .highlight-item { display: flex; align-items: flex-start; margin-bottom: 25px; }
+        .highlight-item i { font-size: 28px; color: var(--accent-cyan); margin-left: 18px; margin-top: 2px; }
+        .highlight-item div h4 { font-size: 18px; font-weight: 700; margin-bottom: 5px; color: #fff; }
+        .highlight-item div p { font-size: 14px; opacity: 0.85; line-height: 1.5; color: #ddd; }
+
+        /* --- 7. Sections Grid --- */
+        .section-padding { padding: 100px 0; }
+        .bg-light { background-color: var(--section-bg); }
+        .section-header { text-align: center; margin-bottom: 70px; }
+        .section-header h2 { font-size: 40px; color: var(--primary-navy); font-weight: 900; margin-bottom: 20px; position: relative; display: inline-block; }
+        .section-header h2::after { content: ''; display: block; width: 80px; height: 5px; background: var(--accent-cyan); margin: 15px auto 0; border-radius: 2px; }
+        .section-header p { color: var(--text-light); max-width: 700px; margin: 0 auto; font-size: 18px; line-height: 1.6; }
+        
+        .grid-4 { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 30px; }
+        .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 40px; }
+        
+        .card-base { background: var(--white); border-radius: 6px; overflow: hidden; box-shadow: 0 5px 20px rgba(0,0,0,0.04); transition: 0.4s; border: 1px solid #eaeaea; }
+        .card-base:hover { transform: translateY(-10px); box-shadow: 0 20px 40px rgba(0,0,0,0.12); border-color: var(--accent-cyan); }
+
+        .service-card { padding: 35px; height: 100%; }
+        .service-icon { width: 70px; height: 70px; background: #eef7ff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 30px; color: var(--primary-navy); margin-bottom: 25px; transition: 0.3s; }
+        .service-card:hover .service-icon { background: var(--accent-cyan); color: var(--white); }
+        .service-card h3 { color: var(--primary-navy); font-size: 22px; margin-bottom: 20px; font-weight: 800; }
+        .service-card ul li { margin-bottom: 12px; font-size: 15px; color: var(--text-light); display: flex; align-items: start; }
+        .service-card ul li::before { content: '›'; color: var(--accent-cyan); font-size: 20px; font-weight:bold; margin-left: 10px; line-height: 18px; }
+        
+        .project-img { height: 260px; overflow: hidden; position: relative; }
+        .project-img img { width: 100%; height: 100%; object-fit: cover; transition: 0.6s ease; }
+        .project-card:hover .project-img img { transform: scale(1.1); }
+        .project-info { padding: 30px; }
+        .project-cat { color: var(--accent-cyan); font-weight: bold; font-size: 12px; text-transform: uppercase; letter-spacing: 1px; display: block; margin-bottom: 10px; background: rgba(0, 163, 255, 0.1); padding: 4px 10px; border-radius: 4px; width: fit-content; }
+        .project-title { font-size: 22px; font-weight: 800; color: var(--primary-navy); margin-bottom: 12px; }
+        /* --- التصحيح هنا: التأكد من ظهور وصف المشروع في كل الشاشات --- */
+        .project-desc { font-size: 15px; color: var(--text-light); line-height: 1.6; display: block !important; }
+
+        .about-grid, .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 70px; align-items: center; }
+        .vision-box { background: var(--white); padding: 30px; border-radius: 8px; margin-top: 25px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); border-right: 5px solid var(--accent-cyan); }
+
+        .contact-info-box { background: var(--primary-navy); padding: 40px; color: white; border-radius: 8px; }
+        .contact-info-box h3 { margin-bottom: 30px; font-size: 24px; color: var(--accent-cyan); }
+        .c-item { display: flex; margin-bottom: 25px; font-size: 16px; }
+        .c-item i { width: 40px; height: 40px; background: rgba(255,255,255,0.1); border-radius: 50%; display: flex; justify-content: center; align-items: center; color: var(--accent-cyan); margin-left: 15px; flex-shrink: 0; }
+        html[dir="ltr"] .c-item i { margin-left: 0; margin-right: 15px; }
+        .contact-form { background: white; padding: 40px; box-shadow: 0 10px 40px rgba(0,0,0,0.05); border-radius: 8px; border: 1px solid #eee; }
+        .form-group { margin-bottom: 20px; }
+        .form-control { width: 100%; padding: 15px; border: 1px solid #ddd; border-radius: 4px; font-family: inherit; transition: 0.3s; background: #fbfbfb; }
+        .form-control:focus { border-color: var(--accent-cyan); background: white; outline: none; }
+        .btn-submit { width: 100%; background: var(--primary-navy); color: white; padding: 15px; border: none; border-radius: 4px; font-weight: bold; font-size: 16px; cursor: pointer; transition: 0.3s; }
+        .btn-submit:hover { background: var(--accent-cyan); }
+
+        footer { background-color: var(--primary-navy); color: var(--white); padding: 90px 0 30px; margin-top: 50px; }
+        .footer-col h4 { font-size: 20px; margin-bottom: 30px; color: var(--white); border-bottom: 3px solid var(--accent-cyan); display: inline-block; padding-bottom: 10px; }
+        .footer-links li { margin-bottom: 15px; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 10px; }
+        .footer-links a:hover { color: var(--accent-cyan); padding-right: 10px; }
+        .contact-li { display: flex; gap: 15px; margin-bottom: 25px; }
+        .contact-li i { color: var(--accent-cyan); font-size: 20px; background: rgba(255,255,255,0.1); padding: 10px; border-radius: 50%; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; }
+
+        #backToTop { position: fixed; bottom: 30px; right: 30px; width: 50px; height: 50px; background: var(--accent-cyan); color: white; border: none; border-radius: 50%; cursor: pointer; display: none; justify-content: center; align-items: center; font-size: 20px; box-shadow: 0 5px 15px rgba(0,0,0,0.3); z-index: 999; transition: 0.3s; }
+        #backToTop:hover { background: var(--white); color: var(--accent-cyan); transform: translateY(-5px); }
+
+        /* --- 8. MOBILE OPTIMIZATION --- */
+        @media (max-width: 992px) {
+            .top-bar { font-size: 11px; padding: 6px 0; background: var(--primary-navy); color: white; }
+            .top-info span { margin-left: 10px; color: white; }
+            .top-info i { color: var(--accent-cyan); }
+            .lang-btn { border-color: rgba(255,255,255,0.3); color: white; }
+
+            header { height: 70px; }
+            .logo-area { padding-left: 10px; flex: 1; }
+            .logo { font-size: 20px; gap: 5px; }
+            .logo i { font-size: 24px; }
+
+            .nav-wrapper {
+                position: fixed; top: 70px; left: 0; width: 100%;
+                background: var(--primary-navy);
+                flex-direction: column; align-items: flex-start;
+                padding: 0; clip-path: none !important;
+                display: none; height: calc(100vh - 70px);
+                overflow-y: auto; box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+            }
+            .nav-wrapper::before { display: none; }
+            .nav-wrapper.active { display: flex; }
+
+            .nav-menu { flex-direction: column; width: 100%; height: auto; padding-bottom: 50px; }
+            .nav-item { width: 100%; display: block; height: auto; border-bottom: 1px solid rgba(255,255,255,0.05); }
+            .nav-link { color: white; padding: 20px; width: 100%; justify-content: space-between; font-size: 15px; }
+            .nav-link:hover { background: rgba(255,255,255,0.05); }
+
+            .mega-menu, .dropdown {
+                position: static; width: 100%; opacity: 1; visibility: visible; transform: none;
+                box-shadow: none; background: rgba(0,0,0,0.2); padding: 10px;
+                display: block; grid-template-columns: 1fr; border-top: none;
+            }
+            
+            .mega-col { padding: 15px; border-bottom: 1px solid rgba(255,255,255,0.05); }
+            .mega-col h4 { font-size: 14px; color: var(--accent-cyan); margin-bottom: 10px; border-bottom: none; }
+            .mega-col ul li a, .dropdown li a {
+                padding: 10px 0 10px 15px; font-size: 13px; color: #ddd; background: transparent; border: none; text-align: right;
+            }
+            html[dir="ltr"] .mega-col ul li a, html[dir="ltr"] .dropdown li a { text-align: left; padding: 10px 15px 10px 0; }
+            .dropdown-header { background: transparent; color: var(--accent-cyan); padding: 10px 0; font-size: 13px; }
+
+            .hamburger { display: block; margin-right: 20px; font-size: 22px; color: var(--primary-navy); }
+
+            .hero { height: auto; min-height: 600px; padding-top: 80px; align-items: flex-start; }
+            .hero-container { flex-direction: column; text-align: center; justify-content: flex-start; padding-top: 20px; }
+            .hero-content { margin-bottom: 40px; padding: 0 15px; order: 1; }
+            .hero-title { font-size: 34px; margin-bottom: 15px; }
+            .hero-subtitle { font-size: 20px; margin-bottom: 20px; }
+            
+            .highlights-box { width: 90%; transform: none; margin: 0 auto 30px; order: 2; padding: 30px; text-align: right; }
+            html[dir="ltr"] .highlights-box { text-align: left; }
+            .highlights-box > * { transform: none; }
+            .hero-shape { clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%); width: 100%; opacity: 0.5; } 
+
+            .grid-4, .grid-3 { grid-template-columns: 1fr 1fr; gap: 15px; }
+            
+            .project-img { height: 150px; }
+            .project-info { padding: 15px; }
+            .project-title { font-size: 15px; margin-bottom: 5px; }
+            .project-cat { font-size: 10px; padding: 3px 8px; }
+            
+            /* تم التأكيد على إظهار الوصف هنا */
+            .project-desc { display: block !important; font-size: 13px; margin-top: 5px; }
+            
+            .service-card { padding: 20px; }
+            .service-icon { width: 50px; height: 50px; font-size: 22px; margin-bottom: 15px; }
+            .service-card h3 { font-size: 17px; margin-bottom: 10px; }
+            .service-card ul li { font-size: 12px; margin-bottom: 5px; }
+
+            .about-grid, .contact-grid { grid-template-columns: 1fr; gap: 40px; }
+            .section-padding { padding: 60px 0; }
+            .section-header h2 { font-size: 30px; }
+            footer { padding: 50px 0 20px; }
+            .footer-col h4 { font-size: 18px; margin-bottom: 15px; }
+        }
+        
+        @media (max-width: 480px) {
+            .grid-3, .grid-4 { grid-template-columns: 1fr; }
+            .project-img { height: 220px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="preloader">
+        <div class="loader-logo">ATLAS</div>
+        <div class="spinner"></div>
+    </div>
+
+    <button id="backToTop"><i class="fas fa-arrow-up"></i></button>
+
+    <div class="top-bar">
+        <div class="container">
+            <div class="top-info">
+                <span dir="ltr"><i class="fas fa-phone-alt"></i> +2 0111 29 44 33 0</span>
+                <span><i class="fas fa-envelope"></i> info@atlas-eg.com</span>
+            </div>
+            <button class="lang-btn" id="langBtn">English</button>
+        </div>
+    </div>
+
+    <header>
+        <div class="header-inner">
+            <div class="logo-area">
+                <a href="#" class="logo">
+                    <img src="images/logo.jpg" alt="Atlas Logo" style="height: 60px; width: auto; object-fit: contain;">
+                </a>
+            </div>
+            
+            <div class="mobile-menu-btn">
+                <div class="hamburger"><i class="fas fa-bars"></i></div>
+            </div>
+
+            <div class="nav-wrapper">
+                <ul class="nav-menu">
+                    <li class="nav-item"><a href="#hero" class="nav-link" data-i18n="nav_home">الرئيسية</a></li>
+                    <li class="nav-item"><a href="#about" class="nav-link" data-i18n="nav_about">من نحن</a></li>
+                    
+                    <li class="nav-item mega-parent">
+                        <a href="#products" class="nav-link" data-i18n="nav_products">الخدمات <i class="fas fa-chevron-down"></i></a>
+                        <div class="mega-menu">
+                            <div class="mega-col">
+                                <h4 data-i18n="srv_concrete">الأعمال الخرسانية</h4>
+                                <ul>
+                                    <li><a href="#srv-concrete">المباني السكنية والفيلات</a></li>
+                                    <li><a href="#srv-concrete">المباني الإدارية</a></li>
+                                    <li><a href="#srv-concrete">المصانع والمنشآت</a></li>
+                                    <li><a href="#srv-concrete">مساحات التخزين</a></li>
+                                </ul>
+                            </div>
+                            <div class="mega-col">
+                                <h4 data-i18n="srv_steel">المنشآت المعدنية</h4>
+                                <ul>
+                                    <li><a href="#srv-steel">الهناجر المعدنية (PEB)</a></li>
+                                    <li><a href="#srv-steel">هياكل تحميل المعدات</a></li>
+                                    <li><a href="#srv-steel">بكر الكابلات المعدنية</a></li>
+                                    <li><a href="#srv-steel">الكرافانات والأسوار</a></li>
+                                </ul>
+                            </div>
+                            <div class="mega-col">
+                                <h4 data-i18n="srv_finish">التشطيبات والديكور</h4>
+                                <ul>
+                                    <li><a href="#srv-finish">الأبواب الخشبية والتجاليد</a></li>
+                                    <li><a href="#srv-finish">واجهات الألومنيوم</a></li>
+                                    <li><a href="#srv-finish">قواطيع الزجاج السيكوريت</a></li>
+                                    <li><a href="#srv-finish">بكر الكابلات الخشبية</a></li>
+                                </ul>
+                            </div>
+                            <div class="mega-col">
+                                <h4 data-i18n="srv_mep">الأعمال الكهروميكانيكية</h4>
+                                <ul>
+                                    <li><a href="#srv-mep">أنظمة HVAC والتهوية</a></li>
+                                    <li><a href="#srv-mep">الكهرباء والسباكة</a></li>
+                                    <li><a href="#srv-mep">أنظمة القمامة</a></li>
+                                    <li><a href="#srv-mep">أبواب الحريق والهروب</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </li>
+                    
+                    <li class="nav-item">
+                        <a href="#projects" class="nav-link" data-i18n="nav_projects">المشاريع <i class="fas fa-chevron-down"></i></a>
+                        <ul class="dropdown">
+                            <li class="dropdown-header" data-i18n="cat_industrial">صناعي</li>
+                            <li><a href="project-bicc.html" data-i18n="prj_bicc">مصنع BICC للكابلات</a></li>
+                            <li><a href="#p-futurefert" data-i18n="prj_futurefert">مصنع فيوتشرفيرت للأسمدة</a></li>
+                            <li><a href="#p-wisdom" data-i18n="prj_wisdom">مصنع ويزدوم للأدوية</a></li>
+                            <li><a href="#p-electro" data-i18n="prj_electro">شركة ElectroGeorge</a></li>
+                            
+                            <li class="dropdown-header" data-i18n="cat_residential">سكني</li>
+                            <li><a href="#p-orouba" data-i18n="prj_orouba">أبراج العروبة</a></li>
+                            <li><a href="#p-village" data-i18n="prj_village">كمبوند فاليدج ويست</a></li>
+                            
+                            <li class="dropdown-header" data-i18n="cat_tourism">سياحي وتجاري</li>
+                            <li><a href="#p-laplaya" data-i18n="prj_laplaya">فندق لابلايا - الساحل</a></li>
+                            <li><a href="#p-ufc" data-i18n="prj_ufc">صالة UFC الرياضية</a></li>
+                            <li><a href="#p-address" data-i18n="prj_address">مشروع The Address</a></li>
+                        </ul>
+                    </li>
+                    
+                    <li class="nav-item"><a href="#contact" class="nav-link" data-i18n="nav_contact">اتصل بنا</a></li>
+                </ul>
+            </div>
+        </div>
+    </header>
+
+    <section id="hero" class="hero">
+        <div class="hero-overlay"></div>
+        <div class="hero-shape"></div>
+        
+        <div class="hero-container">
+            <div class="hero-content reveal">
+                <h1 class="hero-title" data-i18n="hero_title">أطلس للتشييد والبناء</h1>
+                <span class="hero-subtitle" data-i18n="hero_subtitle">شريكك الإستراتيجي في المشاريع الكبرى</span>
+                <p class="hero-desc" data-i18n="hero_desc">
+                    نقدم حلولاً هندسية متكاملة في الأعمال الخرسانية، الهياكل المعدنية، والتشطيبات بخبرة تتجاوز 30 عاماً في مصر والمنطقة.
+                </p>
+                <a href="#projects" class="btn-main" data-i18n="btn_browse">استعرض مشاريعنا</a>
+            </div>
+
+            <div class="highlights-box reveal">
+                <h3 data-i18n="hl_title">لماذا تختار أطلس؟</h3>
+                <div class="highlight-item">
+                    <i class="fas fa-medal"></i>
+                    <div>
+                        <h4 data-i18n="hl_1_title">خبرة عريقة</h4>
+                        <p data-i18n="hl_1_desc">أكثر من 30 عاماً من التميز في تنفيذ المشاريع الكبرى والمعقدة.</p>
+                    </div>
+                </div>
+                <div class="highlight-item">
+                    <i class="fas fa-check-circle"></i>
+                    <div>
+                        <h4 data-i18n="hl_2_title">جودة عالمية</h4>
+                        <p data-i18n="hl_2_desc">التزام صارم بأعلى معايير الجودة والسلامة الدولية.</p>
+                    </div>
+                </div>
+                <div class="highlight-item">
+                    <i class="fas fa-handshake"></i>
+                    <div>
+                        <h4 data-i18n="hl_3_title">حلول متكاملة</h4>
+                        <p data-i18n="hl_3_desc">من التصميم إلى التسليم، نقدم كافة خدمات البناء.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="about" class="section-padding">
+        <div class="container">
+            <div class="about-grid reveal">
+                <div class="about-text">
+                    <div class="section-header" style="text-align: right; margin-bottom: 30px;">
+                        <h2 data-i18n="about_title" style="margin: 0;">الريادة في البناء والتصنيع</h2>
+                    </div>
+                    <p data-i18n="about_desc1">شركة أطلس للتشييد والبناء هي شركة متخصصة في تقديم حلول شاملة للبناء والتصنيع، بما يشمل الأعمال الخرسانية وتصنيع وتركيب الهياكل المعدنية وأعمال التشطيبات والديكور.</p>
+                    <p data-i18n="about_desc2">منذ تأسيسها، حرصت أطلس على الالتزام بأعلى معايير الجودة والكفاءة والابتكار لتلبية احتياجات عملائها وتقديم حلول متكاملة تبدأ من التصميم المخصص إلى التنفيذ.</p>
+                    <div class="vision-box">
+                        <h4 data-i18n="vision_title" style="color:var(--primary-navy); margin-bottom:10px;">رؤيتنا</h4>
+                        <p data-i18n="vision_desc" style="margin:0; color:var(--text-light);">نطمح لأن نكون من الشركات الرائدة في قطاع البناء والتصنيع في مصر والمنطقة من خلال تقديم حلول متميزة ومستدامة.</p>
+                    </div>
+                </div>
+                <div class="about-img">
+                    <img src="https://images.unsplash.com/photo-1541888946425-d81bb19240f5?ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80" alt="About Atlas" loading="lazy" style="border-radius: 8px; box-shadow: 0 20px 50px rgba(0,0,0,0.15);">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="products" class="section-padding bg-light">
+        <div class="container">
+            <div class="section-header reveal">
+                <h2 data-i18n="services_header">خدماتنا ومنتجاتنا</h2>
+                <p data-i18n="services_sub">نحرص على تقديم مجموعة متكاملة من الخدمات التي تتسم بالجودة العالية والتنوع</p>
+            </div>
+
+            <div class="grid-4">
+                <div class="card-base service-card reveal" id="srv-concrete">
+                    <div class="service-icon"><i class="fas fa-building"></i></div>
+                    <h3 data-i18n="srv_concrete">الأعمال الخرسانية</h3>
+                    <img src="https://images.unsplash.com/photo-1590059290022-7206e00b2133?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80" loading="lazy" style="margin-bottom:15px; border-radius:4px; height:150px; width:100%; object-fit:cover;" alt="Concrete">
+                    <ul>
+                        <li data-i18n="srv_concrete_1">المباني السكنية والفيلات والمجمعات</li>
+                        <li data-i18n="srv_concrete_2">المباني الإدارية ومتعددة الاستخدامات</li>
+                        <li data-i18n="srv_concrete_3">المصانع والمنشآت الصناعية</li>
+                    </ul>
+                </div>
+                <div class="card-base service-card reveal" id="srv-steel">
+                    <div class="service-icon"><i class="fas fa-industry"></i></div>
+                    <h3 data-i18n="srv_steel">المنشآت المعدنية</h3>
+                    <img src="https://images.unsplash.com/photo-1504917595217-d4dc5ebe6122?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80" loading="lazy" style="margin-bottom:15px; border-radius:4px; height:150px; width:100%; object-fit:cover;" alt="Steel">
+                    <ul>
+                        <li data-i18n="srv_steel_1">الهناجر المعدنية (PEB) والمباني الجاهزة</li>
+                        <li data-i18n="srv_steel_2">هياكل تحميل المعدات الثقيلة</li>
+                        <li data-i18n="srv_steel_3">بكر الكابلات المعدنية والكرافانات</li>
+                    </ul>
+                </div>
+                <div class="card-base service-card reveal" id="srv-finish">
+                    <div class="service-icon"><i class="fas fa-paint-roller"></i></div>
+                    <h3 data-i18n="srv_finish">التشطيبات والديكور</h3>
+                    <img src="https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80" loading="lazy" style="margin-bottom:15px; border-radius:4px; height:150px; width:100%; object-fit:cover;" alt="Finishing">
+                    <ul>
+                        <li data-i18n="srv_finish_1">تصنيع الأبواب الخشبية والتجاليد</li>
+                        <li data-i18n="srv_finish_2">واجهات الألومنيوم والنوافذ</li>
+                        <li data-i18n="srv_finish_3">قواطيع وأبواب الزجاج السيكوريت</li>
+                    </ul>
+                </div>
+                <div class="card-base service-card reveal" id="srv-mep">
+                    <div class="service-icon"><i class="fas fa-cogs"></i></div>
+                    <h3 data-i18n="srv_mep">الأعمال الكهروميكانيكية</h3>
+                    <img src="https://images.unsplash.com/photo-1621905252507-b35492cc79b4?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80" loading="lazy" style="margin-bottom:15px; border-radius:4px; height:150px; width:100%; object-fit:cover;" alt="MEP">
+                    <ul>
+                        <li data-i18n="srv_mep_1">أنظمة HVAC والتهوية المركزية</li>
+                        <li data-i18n="srv_mep_2">الأعمال الكهربائية والسباكة المتكاملة</li>
+                        <li data-i18n="srv_mep_3">أنظمة إلقاء القمامة وأبواب الحريق</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="projects" class="section-padding">
+        <div class="container">
+            <div class="section-header reveal">
+                <h2 data-i18n="projects_header">سجل إنجازاتنا</h2>
+                <p data-i18n="projects_sub">نفخر بتنفيذ مشاريع كبرى لأهم العملاء في مختلف القطاعات</p>
+            </div>
+            
+            <h3 style="color: var(--primary-navy); margin: 40px 0 20px; border-bottom: 2px solid #eee; padding-bottom: 10px;" class="reveal" data-i18n="header_industrial">مشاريع صناعية</h3>
+            <div class="grid-3">
+                <div class="card-base project-card reveal" id="p-futurefert">
+                    <div class="project-img"><img src="https://images.unsplash.com/photo-1581093458791-9f3c3900df4b?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" loading="lazy" alt="Factory"></div>
+                    <div class="project-info">
+                        <span class="project-cat" data-i18n="cat_industrial">صناعي</span>
+                        <h3 class="project-title" data-i18n="prj_futurefert">مصنع فيوتشرفيرت للأسمدة</h3>
+                        <p class="project-desc" data-i18n="desc_futurefert">إنشاء هانجر تخزين الفوسفات (6000 م²) وهناجر الإنتاج والمبنى الإداري بالعين السخنة.</p>
+                    </div>
+                </div>
+                
+                <div class="card-base project-card reveal" id="p-bicc">
+                    <a href="project-bicc.html" class="project-img">
+                        <img src="images/bicc-card.png" loading="lazy" alt="Cables Factory">
+                    </a>
+                    <div class="project-info">
+                        <span class="project-cat" data-i18n="cat_industrial">صناعي</span>
+                        <h3 class="project-title">
+                            <a href="project-bicc.html" data-i18n="prj_bicc">مصنع BICC للكابلات</a>
+                        </h3>
+                        <p class="project-desc" data-i18n="desc_bicc">توسعة المصنع، إنشاء هناجر الإنتاج ومخزن (10,000 م²) وبرج ماكينات CVL.</p>
+                    </div>
+                </div>
+
+                <div class="card-base project-card reveal" id="p-wisdom">
+                    <div class="project-img"><img src="https://images.unsplash.com/photo-1579684385127-1ef15d508118?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" loading="lazy" alt="Pharma"></div>
+                    <div class="project-info">
+                        <span class="project-cat" data-i18n="cat_industrial">صناعي</span>
+                        <h3 class="project-title" data-i18n="prj_wisdom">مصنع ويزدوم للأدوية</h3>
+                        <p class="project-desc" data-i18n="desc_wisdom">إنشاء المبنى الإداري وصالات الإنتاج والمعامل (2500 م²) وهناجر الإنتاج بمدينة السادات.</p>
+                    </div>
+                </div>
+                 <div class="card-base project-card reveal" id="p-electro">
+                    <div class="project-img"><img src="https://images.unsplash.com/photo-1565610222536-ef125c59da2e?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" loading="lazy" alt="ElectroGeorge"></div>
+                    <div class="project-info">
+                        <span class="project-cat" data-i18n="cat_industrial">صناعي</span>
+                        <h3 class="project-title" data-i18n="prj_electro">شركة ElectroGeorge</h3>
+                        <p class="project-desc" data-i18n="desc_electro">تطوير المصنع وإعادة هيكلة صالات الإنتاج واستحداث أدوار ميزانين وإنشاء مبنى المهندسين.</p>
+                    </div>
+                </div>
+            </div>
+
+            <h3 style="color: var(--primary-navy); margin: 60px 0 20px; border-bottom: 2px solid #eee; padding-bottom: 10px;" class="reveal" data-i18n="header_residential">مشاريع سكنية</h3>
+            <div class="grid-3">
+                <div class="card-base project-card reveal" id="p-orouba">
+                    <div class="project-img"><img src="https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" loading="lazy" alt="Towers"></div>
+                    <div class="project-info">
+                        <span class="project-cat" data-i18n="cat_residential">سكني</span>
+                        <h3 class="project-title" data-i18n="prj_orouba">أبراج العروبة</h3>
+                        <p class="project-desc" data-i18n="desc_orouba">بناء أبراج سكنية في مدينة نصر ومدينة 6 أكتوبر لصالح شركة العروبة للتطوير.</p>
+                    </div>
+                </div>
+                <div class="card-base project-card reveal" id="p-village">
+                    <div class="project-img"><img src="https://images.unsplash.com/photo-1600607687920-4e24078b3651?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" loading="lazy" alt="Compound"></div>
+                    <div class="project-info">
+                        <span class="project-cat" data-i18n="cat_residential">سكني</span>
+                        <h3 class="project-title" data-i18n="prj_village">كمبوند فاليدج ويست</h3>
+                        <p class="project-desc" data-i18n="desc_village">أعمال الأعمدة الديكورية وأبواب الهروب المعدنية لصالح مجموعة درة (الشيخ زايد).</p>
+                    </div>
+                </div>
+            </div>
+
+            <h3 style="color: var(--primary-navy); margin: 60px 0 20px; border-bottom: 2px solid #eee; padding-bottom: 10px;" class="reveal" data-i18n="header_tourism">مشاريع سياحية وتجارية</h3>
+            <div class="grid-3">
+                <div class="card-base project-card reveal" id="p-laplaya">
+                    <div class="project-img"><img src="https://images.unsplash.com/photo-1566073771259-6a8506099945?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" loading="lazy" alt="Resort"></div>
+                    <div class="project-info">
+                        <span class="project-cat" data-i18n="cat_tourism">سياحي</span>
+                        <h3 class="project-title" data-i18n="prj_laplaya">فندق لابلايا - الساحل</h3>
+                        <p class="project-desc" data-i18n="desc_laplaya">تشطيب الأرضيات بالهيلكوبتر، فواصل مسلحة، وأعمال الجراجات (2,800 م²) - مارينا.</p>
+                    </div>
+                </div>
+                <div class="card-base project-card reveal" id="p-ufc">
+                    <div class="project-img"><img src="https://images.unsplash.com/photo-1599058945522-28d584b6f0ff?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" loading="lazy" alt="UFC Gym"></div>
+                    <div class="project-info">
+                        <span class="project-cat" data-i18n="cat_commercial">تجاري / رياضي</span>
+                        <h3 class="project-title" data-i18n="prj_ufc">صالة UFC الرياضية</h3>
+                        <p class="project-desc" data-i18n="desc_ufc">أعمال التشطيبات المتكاملة لصالة الألعاب الرياضية بمدينة الشيخ زايد.</p>
+                    </div>
+                </div>
+                <div class="card-base project-card reveal" id="p-address">
+                    <div class="project-img"><img src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" loading="lazy" alt="Address"></div>
+                    <div class="project-info">
+                        <span class="project-cat" data-i18n="cat_special">أعمال تخصصية</span>
+                        <h3 class="project-title" data-i18n="prj_address">مشروع The Address</h3>
+                        <p class="project-desc" data-i18n="desc_address">أعمدة الإنارة وتصنيع وتركيب مواسير النفايات (Garbage Chutes) لـ 26 عمارة.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="contact" class="section-padding bg-light">
+        <div class="container">
+            <div class="section-header reveal">
+                <h2 data-i18n="nav_contact">تواصل معنا</h2>
+                <p data-i18n="projects_sub">نحن هنا للإجابة على استفساراتكم ومناقشة مشاريعكم</p>
+            </div>
+            <div class="contact-grid reveal">
+                <div class="contact-info-box">
+                    <h3>بيانات الاتصال</h3>
+                    <div class="c-item">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <div><strong data-i18n="lbl_address">العنوان:</strong> <br><span data-i18n="val_address">مدينة الشيخ زايد، الحي الثامن</span></div>
+                    </div>
+                    <div class="c-item">
+                        <i class="fas fa-phone"></i>
+                        <div><strong data-i18n="lbl_call">الهاتف:</strong> <br><span dir="ltr">0111 29 44 33 0</span></div>
+                    </div>
+                    <div class="c-item">
+                        <i class="fas fa-envelope"></i>
+                        <div><strong data-i18n="lbl_email">البريد الإلكتروني:</strong> <br>info@atlas-eg.com</div>
+                    </div>
+                </div>
+                <div class="contact-form">
+                    <form>
+                        <div class="form-group">
+                            <input type="text" class="form-control" placeholder="الاسم" required>
+                        </div>
+                        <div class="form-group">
+                            <input type="email" class="form-control" placeholder="البريد الإلكتروني" required>
+                        </div>
+                        <div class="form-group">
+                            <textarea class="form-control" rows="5" placeholder="الرسالة" required></textarea>
+                        </div>
+                        <button type="submit" class="btn-submit">إرسال الرسالة</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <div class="grid-4">
+                <div class="footer-col reveal">
+                    <h4 data-i18n="footer_about">عن أطلس</h4>
+                    <p style="color: rgba(255,255,255,0.7); line-height: 1.8;" data-i18n="footer_desc">شركة رائدة في مجال المقاولات المتكاملة، ملتزمون بالجودة والسلامة في جميع مشاريعنا وتوسيع نطاق خدماتنا في مصر وأفريقيا.</p>
+                </div>
+                <div class="footer-col reveal">
+                    <h4 data-i18n="footer_links">روابط هامة</h4>
+                    <ul class="footer-links">
+                        <li><a href="#hero" data-i18n="nav_home">الرئيسية</a></li>
+                        <li><a href="#about" data-i18n="nav_about">من نحن</a></li>
+                        <li><a href="#products" data-i18n="nav_products">الخدمات</a></li>
+                        <li><a href="#projects" data-i18n="nav_projects">المشاريع</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col reveal">
+                    <h4 data-i18n="nav_contact">تواصل معنا</h4>
+                    <ul>
+                        <li class="contact-li">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <div>
+                                <strong style="display:block; color:#fff; font-size: 14px;">المكتب الرئيسي:</strong>
+                                <span data-i18n="val_address" style="color: rgba(255,255,255,0.7); font-size: 14px;">مدينة الشيخ زايد، الحي الثامن</span>
+                            </div>
+                        </li>
+                        <li class="contact-li">
+                            <i class="fas fa-industry"></i>
+                            <div>
+                                <strong style="display:block; color:#fff; font-size: 14px;">المصانع:</strong>
+                                <span data-i18n="val_factories" style="color: rgba(255,255,255,0.7); font-size: 14px;">أبو رواش & منيل شيحة</span>
+                            </div>
+                        </li>
+                        <li class="contact-li">
+                            <i class="fas fa-phone"></i>
+                            <span dir="ltr" style="color: rgba(255,255,255,0.7);">0111 29 44 33 0</span>
+                        </li>
+                        <li class="contact-li">
+                            <i class="fas fa-envelope"></i>
+                            <span style="color: rgba(255,255,255,0.7);">info@atlas-eg.com</span>
+                        </li>
+                    </ul>
+                </div>
+                 <div class="footer-col reveal">
+                    <h4 data-i18n="follow_us">تابعنا</h4>
+                    <div class="social-icons" style="display: flex; gap: 15px;">
+                        <a href="#" style="font-size: 20px;"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" style="font-size: 20px;"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="#" style="font-size: 20px;"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="copyright" style="text-align: center; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 30px; margin-top: 50px; font-size: 14px; color: rgba(255,255,255,0.5);">
+                <p data-i18n="copyright">جميع الحقوق محفوظة ©️ 2025 أطلس للتشييد والبناء</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Preloader
+        window.addEventListener('load', function() {
+            var preloader = document.getElementById('preloader');
+            preloader.style.opacity = '0';
+            setTimeout(function() { preloader.style.display = 'none'; }, 500);
+        });
+
+        // IntersectionObserver for Zero-Lag Animation
+        const observerOptions = {
+            root: null,
+            rootMargin: '0px',
+            threshold: 0.1
+        };
+
+        const observer = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                    observer.unobserve(entry.target); // Stop observing once revealed
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.reveal').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Back to Top
+        var backToTopBtn = document.getElementById("backToTop");
+        window.addEventListener('scroll', function() {
+            if (window.scrollY > 300) {
+                backToTopBtn.style.display = "flex";
+            } else {
+                backToTopBtn.style.display = "none";
+            }
+        }, { passive: true });
+        
+        backToTopBtn.onclick = function() {
+            window.scrollTo({top: 0, behavior: 'smooth'});
+        };
+
+        // Translations (Full)
+        const translations = {
+            ar: {
+                nav_home: "الرئيسية", nav_about: "من نحن", nav_products: "الخدمات", nav_projects: "المشاريع", nav_contact: "اتصل بنا",
+                hero_title: "أطلس للتشييد والبناء", hero_subtitle: "شريكك الإستراتيجي في المشاريع الكبرى",
+                hero_desc: "نقدم حلولاً هندسية متكاملة في الأعمال الخرسانية، الهياكل المعدنية، والتشطيبات بخبرة تتجاوز 30 عاماً في مصر والمنطقة.",
+                btn_browse: "استعرض مشاريعنا",
+                hl_title: "لماذا تختار أطلس؟", hl_1_title: "خبرة عريقة", hl_1_desc: "أكثر من 30 عاماً من التميز.",
+                hl_2_title: "جودة عالمية", hl_2_desc: "التزام صارم بأعلى معايير الجودة.",
+                hl_3_title: "حلول متكاملة", hl_3_desc: "من التصميم إلى التسليم.",
+                about_title: "الريادة في البناء والتصنيع",
+                about_desc1: "شركة أطلس للتشييد والبناء هي شركة متخصصة في تقديم حلول شاملة للبناء والتصنيع.",
+                about_desc2: "منذ تأسيسها، حرصت أطلس على الالتزام بأعلى معايير الجودة والكفاءة والابتكار.",
+                vision_title: "رؤيتنا", vision_desc: "نطمح لأن نكون من الشركات الرائدة في قطاع البناء.",
+                services_header: "خدماتنا ومنتجاتنا", services_sub: "نحرص على تقديم مجموعة متكاملة من الخدمات التي تتسم بالجودة العالية والتنوع",
+                srv_concrete: "الأعمال الخرسانية", srv_concrete_1: "المباني السكنية والفيلات والمجمعات", srv_concrete_2: "المباني الإدارية ومتعددة الاستخدامات", srv_concrete_3: "المصانع والمنشآت الصناعية", srv_concrete_4: "مساحات التخزين الأفقية",
+                srv_steel: "المنشآت المعدنية", srv_steel_1: "الهناجر المعدنية (PEB)", srv_steel_2: "هياكل تحميل المعدات", srv_steel_3: "بكر الكابلات المعدنية", srv_steel_4: "الكرافانات والأسوار",
+                srv_finish: "التشطيبات والديكور", srv_finish_1: "تصنيع الأبواب الخشبية والتجاليد", srv_finish_2: "واجهات الألومنيوم والنوافذ", srv_finish_3: "قواطيع الزجاج السيكوريت", srv_finish_4: "بكر الكابلات الخشبية",
+                srv_mep: "الأعمال الكهروميكانيكية", srv_mep_1: "أنظمة HVAC والتهوية", srv_mep_2: "الكهرباء والسباكة", srv_mep_3: "أنظمة القمامة والحريق", srv_mep_4: "أبواب الهروب",
+                projects_header: "سجل إنجازاتنا", projects_sub: "نفخر بتنفيذ مشاريع كبرى لأهم العملاء في مختلف القطاعات",
+                header_industrial: "مشاريع صناعية", header_residential: "مشاريع سكنية", header_tourism: "مشاريع سياحية وتجارية",
+                cat_industrial: "صناعي", cat_residential: "سكني", cat_tourism: "سياحي", cat_commercial: "تجاري / رياضي", cat_special: "أعمال تخصصية",
+                prj_futurefert: "مصنع فيوتشرفيرت للأسمدة", desc_futurefert: "إنشاء هانجر تخزين الفوسفات وهناجر الإنتاج.",
+                prj_bicc: "مصنع BICC للكابلات", desc_bicc: "توسعة المصنع وإنشاء هناجر الإنتاج ومخزن.",
+                prj_wisdom: "مصنع ويزدوم للأدوية", desc_wisdom: "إنشاء المبنى الإداري وصالات الإنتاج والمعامل.",
+                prj_electro: "شركة ElectroGeorge", desc_electro: "تطوير المصنع وإعادة هيكلة صالات الإنتاج.",
+                prj_orouba: "أبراج العروبة", desc_orouba: "بناء أبراج سكنية في مدينة نصر و 6 أكتوبر.",
+                prj_village: "كمبوند فاليدج ويست", desc_village: "أعمال الأعمدة الديكورية وأبواب الهروب.",
+                prj_laplaya: "فندق لابلايا - الساحل", desc_laplaya: "تشطيب الأرضيات بالهيلكوبتر والجراجات.",
+                prj_ufc: "صالة UFC الرياضية", desc_ufc: "أعمال التشطيبات المتكاملة لصالة الألعاب.",
+                prj_address: "مشروع The Address", desc_address: "أعمدة الإنارة ومواسير النفايات لـ 26 عمارة.",
+                footer_about: "عن أطلس", footer_desc: "شركة رائدة في مجال المقاولات المتكاملة.",
+                footer_links: "روابط هامة", follow_us: "تابعنا", val_address: "مدينة الشيخ زايد، الحي الثامن", val_factories: "أبو رواش & منيل شيحة", copyright: "جميع الحقوق محفوظة © 2025 أطلس للتشييد والبناء",
+                lbl_address: "العنوان:", lbl_call: "الهاتف:", lbl_email: "البريد الإلكتروني:"
+            },
+            en: {
+                nav_home: "Home", nav_about: "About Us", nav_products: "Services", nav_projects: "Projects", nav_contact: "Contact Us",
+                hero_title: "Atlas Construction", hero_subtitle: "Your Strategic Partner for Major Projects",
+                hero_desc: "We provide integrated engineering solutions in concrete works, steel structures, and finishing.",
+                btn_browse: "Browse Our Projects", hl_title: "Why Choose Atlas?", hl_1_title: "Deep Experience", hl_1_desc: "Over 30 years of excellence.",
+                hl_2_title: "World-Class Quality", hl_2_desc: "Strict adherence to highest quality standards.", hl_3_title: "Integrated Solutions", hl_3_desc: "From design to delivery.",
+                about_title: "Leadership in Construction", about_desc1: "Atlas Construction provides comprehensive building solutions.",
+                about_desc2: "Committed to the highest standards of quality, efficiency, and innovation.",
+                vision_title: "Our Vision", vision_desc: "To be a leading company in the construction sector.",
+                services_header: "Our Services", services_sub: "Comprehensive range of high-quality services",
+                srv_concrete: "Concrete Works", srv_concrete_1: "Residential & Villas", srv_concrete_2: "Administrative Buildings", srv_concrete_3: "Factories & Industrial", srv_concrete_4: "Storage & Restoration",
+                srv_steel: "Steel Structures", srv_steel_1: "Pre-Engineered Buildings", srv_steel_2: "Equipment Support", srv_steel_3: "Metal Cable Drums", srv_steel_4: "Caravans & Fences",
+                srv_finish: "Finishing & Decor", srv_finish_1: "Wooden Doors & Cladding", srv_finish_2: "Aluminum Facades", srv_finish_3: "Glass Partitions", srv_finish_4: "Wooden Cable Drums",
+                srv_mep: "Electromechanical", srv_mep_1: "HVAC Systems", srv_mep_2: "Electrical & Plumbing", srv_mep_3: "Garbage Chutes", srv_mep_4: "Fire Escape Doors",
+                projects_header: "Our Projects", projects_sub: "Proud to execute major projects",
+                header_industrial: "Industrial Projects", header_residential: "Residential Projects", header_tourism: "Tourism & Commercial",
+                cat_industrial: "Industrial", cat_residential: "Residential", cat_tourism: "Tourism", cat_commercial: "Commercial", cat_special: "Specialized",
+                prj_futurefert: "Futurefert Fertilizers", desc_futurefert: "Phosphate storage hanger and production facilities.",
+                prj_bicc: "BICC Cables Factory", desc_bicc: "Factory expansion and warehouse.",
+                prj_wisdom: "Wisdom Pharma", desc_wisdom: "Admin building and production halls.",
+                prj_electro: "ElectroGeorge", desc_electro: "Factory development and production halls.",
+                prj_orouba: "Al Orouba Towers", desc_orouba: "Residential towers in Nasr City and 6th of October.",
+                prj_village: "Village West", desc_village: "Decorative columns and steel doors.",
+                prj_laplaya: "La Playa Hotel", desc_laplaya: "Flooring and garage works.",
+                prj_ufc: "UFC Gym", desc_ufc: "Complete finishing works.",
+                prj_address: "The Address", desc_address: "Lighting poles and garbage chutes.",
+                footer_about: "About Atlas", footer_desc: "Leading contracting company committed to quality.", footer_links: "Links", follow_us: "Follow Us",
+                val_address: "Sheikh Zayed City, 8th District", val_factories: "Abou Rawash & Manial Shiha", copyright: "All Rights Reserved © 2025 Atlas Construction",
+                lbl_address: "Address:", lbl_call: "Phone:", lbl_email: "Email:"
+            }
+        };
+
+        const langBtn = document.getElementById('langBtn');
+        const elements = document.querySelectorAll('[data-i18n]');
+        
+        // Load saved language
+        let currentLang = localStorage.getItem('lang') || 'ar';
+        updateLang(currentLang);
+
+        langBtn.addEventListener('click', () => {
+            currentLang = currentLang === 'ar' ? 'en' : 'ar';
+            localStorage.setItem('lang', currentLang);
+            updateLang(currentLang);
+        });
+
+        function updateLang(lang) {
+            document.documentElement.lang = lang;
+            document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
+            langBtn.textContent = lang === 'ar' ? 'English' : 'العربية';
+            elements.forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (translations[lang][key]) el.textContent = translations[lang][key];
+            });
+        }
+
+        // Mobile Menu Toggle & Auto Close
+        const hamburger = document.querySelector('.hamburger');
+        const navWrapper = document.querySelector('.nav-wrapper');
+        
+        hamburger.addEventListener('click', () => {
+            navWrapper.classList.toggle('active');
+            hamburger.classList.toggle('active'); // Animate X icon
+        });
+
+        // Close menu when a link is clicked
+        document.querySelectorAll('.nav-link, .dropdown a, .mega-col a').forEach(link => {
+            link.addEventListener('click', () => {
+                if (navWrapper.classList.contains('active')) {
+                    navWrapper.classList.remove('active');
+                    hamburger.classList.remove('active');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مشروع مصنع BICC | أطلس للتشييد</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800;900&family=Poppins:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root { --primary-navy: #001A33; --accent-cyan: #00A3FF; --white: #ffffff; --section-bg: #f4f6f8; --text-color: #2c3e50; --text-light: #5f6c7b; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Cairo', sans-serif; background: var(--white); color: var(--text-color); overflow-x: hidden; }
+        a { text-decoration: none; color: inherit; transition: 0.3s; }
+        img { max-width: 100%; display: block; }
+
+        .page-header { background: var(--primary-navy); padding: 15px 5%; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 1000; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        .logo { font-size: 24px; font-weight: 900; color: var(--white); display: flex; align-items: center; gap: 10px; }
+        .logo i { color: var(--accent-cyan); }
+        .back-btn { color: var(--white); font-weight: 700; font-size: 14px; display: flex; align-items: center; gap: 8px; padding: 8px 15px; border: 1px solid rgba(255,255,255,0.2); border-radius: 4px; }
+        .back-btn:hover { background: var(--accent-cyan); border-color: var(--accent-cyan); }
+
+        .project-hero {
+            height: 60vh; min-height: 400px; position: relative; display: flex; align-items: center; justify-content: center; text-align: center; color: white;
+            /* الرابط الجديد للصورة المبسطة */
+            background: url('images/cover.png') no-repeat center center/cover;
+        }
+        .hero-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(0deg, var(--primary-navy) 0%, rgba(0, 26, 51, 0.4) 100%); }
+        .hero-content { position: relative; z-index: 2; width: 90%; max-width: 1000px; animation: fadeInUp 1s ease-out; }
+        .project-cat { background: var(--accent-cyan); padding: 5px 15px; border-radius: 50px; font-size: 14px; font-weight: bold; display: inline-block; margin-bottom: 15px; }
+        .project-title { font-size: 45px; font-weight: 900; margin-bottom: 10px; }
+        .project-location { font-size: 18px; opacity: 0.9; }
+        .project-location i { color: var(--accent-cyan); margin-left: 5px; }
+
+        .container { width: 90%; max-width: 1200px; margin: 0 auto; padding: 80px 0; }
+        .details-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 50px; }
+        .info-card { background: var(--section-bg); padding: 30px; border-radius: 8px; border-right: 4px solid var(--accent-cyan); }
+        .info-title { font-size: 22px; font-weight: 800; color: var(--primary-navy); margin-bottom: 20px; }
+        .info-list li { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid #ddd; font-size: 15px; }
+        .info-list li:last-child { border-bottom: none; }
+        .info-list strong { color: var(--primary-navy); }
+        .text-content p { line-height: 1.8; margin-bottom: 20px; font-size: 16px; color: var(--text-light); }
+        .text-content h3 { color: var(--primary-navy); font-size: 24px; margin-bottom: 15px; font-weight: 700; }
+
+        .gallery-title { text-align: center; margin-bottom: 40px; font-size: 30px; color: var(--primary-navy); font-weight: 900; }
+        .gallery-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
+        .gallery-item { height: 250px; overflow: hidden; border-radius: 8px; cursor: pointer; position: relative; }
+        .gallery-item img { width: 100%; height: 100%; object-fit: cover; transition: 0.5s; }
+        .gallery-item:hover img { transform: scale(1.1); }
+
+        footer { background: var(--primary-navy); color: white; text-align: center; padding: 30px; margin-top: 50px; font-size: 14px; }
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+        @media (max-width: 768px) { .details-grid { grid-template-columns: 1fr; } .project-title { font-size: 30px; } .project-hero { height: 50vh; } }
+    </style>
+</head>
+<body>
+
+    <header class="page-header">
+        <a href="index.html" class="logo"><i class="fas fa-city"></i> ATLAS</a>
+        <a href="index.html" class="back-btn"><i class="fas fa-arrow-right"></i> العودة للرئيسية</a>
+    </header>
+
+    <section class="project-hero">
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+            <span class="project-cat">مشاريع صناعية</span>
+            <h1 class="project-title">توسعة مصنع BICC للكابلات</h1>
+            <p class="project-location"><i class="fas fa-map-marker-alt"></i> المنطقة الصناعية، الجيزة</p>
+        </div>
+    </section>
+
+    <div class="container">
+        <div class="details-grid">
+            <div class="text-content">
+                <h3>نظرة عامة على المشروع</h3>
+                <p>تفخر شركة أطلس بتنفيذ مشروع توسعة مصنع BICC للكابلات، وهو أحد أهم المشاريع الصناعية الاستراتيجية. شمل المشروع تنفيذ أعمال متكاملة تضمنت الأعمال الخرسانية والهياكل المعدنية بأعلى معايير الجودة والسلامة.</p>
+                <h3>نطاق العمل</h3>
+                <p>تضمن نطاق عملنا إنشاء هناجر الإنتاج الجديدة رقم 02، بالإضافة إلى مستودع تخزين ضخم بمساحة إجمالية تبلغ 10,000 متر مربع لتلبية احتياجات التوسع الإنتاجي للمصنع.</p>
+                <p>كما قمنا بإنشاء برج ماكينات CVL المتطور، وتنفيذ الأساسات الخرسانية المعقدة لماكينات جدل كابلات الجهد المتوسط.</p>
+            </div>
+
+            <div class="info-card">
+                <div class="info-title">بيانات المشروع</div>
+                <ul class="info-list">
+                    <li><span>العميل:</span> <strong>BICC CABLE COMPANY</strong></li>
+                    <li><span>الموقع:</span> <strong>المنطقة الصناعية</strong></li>
+                    <li><span>المساحة:</span> <strong>10,000 متر مربع</strong></li>
+                    <li><span>نوع العمل:</span> <strong>خرسانات & هياكل معدنية</strong></li>
+                    <li><span>مدة التنفيذ:</span> <strong>12 شهر</strong></li>
+                    <li><span>الحالة:</span> <strong>تم التسليم</strong></li>
+                </ul>
+            </div>
+        </div>
+
+        <h2 class="gallery-title">معرض صور المشروع</h2>
+        <div class="gallery-grid">
+            <div class="gallery-item"><img src="images/1.jpg" alt="BICC Project 1"></div>
+            <div class="gallery-item"><img src="images/2.jpg" alt="BICC Project 2"></div>
+            <div class="gallery-item"><img src="images/3.jpg" alt="BICC Project 3"></div>
+            <div class="gallery-item"><img src="images/4.jpg" alt="BICC Project 4"></div>
+        </div>
+    </div>
+
+    <footer>
+        <p>جميع الحقوق محفوظة © 2025 أطلس للتشييد والبناء</p>
+    </footer>
+
+</body>
+</html>
